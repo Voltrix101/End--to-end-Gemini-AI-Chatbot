@@ -20,7 +20,8 @@ os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 ## Function to load OpenAI model and get respones
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-1.5-pro-latest')
+chat = model.start_chat(history=[])
 chat = model.start_chat(history=[])
 def get_gemini_response(question):
     
@@ -39,7 +40,14 @@ input=st.text_input("Input: ",key="input")
 submit=st.button("Ask the question")
 
 ## If ask button is clicked
+if submit or st.session_state.enter_pressed:
+    response = get_gemini_response(input)
+    st.subheader("The Response is")
+    for chunk in response:
+        st.write(chunk.text)
+        st.write("_" * 80)
 
+st.session_state.enter_pressed = True
 if submit:
     
     response=get_gemini_response(input)
